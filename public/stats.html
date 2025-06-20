@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>الإحصائيات</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: #0c5463f3;
+      overflow-x: hidden;
+      color: #ffffff;
+      padding: 15px;
+    }
+
+    .slide-page {
+      position: fixed;
+      top: 0;
+      right: -100vw;
+      width: 100vw;
+      height: 100vh;
+      background-color: #0c5463f3;
+      transition: right 0.6s ease-in-out;
+      padding: 15px;
+      z-index: 9999;
+    }
+
+    .slide-page.show {
+      right: 0;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .back-icon {
+      font-size: 24px;
+      color: #ddd;
+      cursor: pointer;
+    }
+
+    h3 {
+      font-size: 24px;
+      color: #e1e3e4;
+      font-weight: bold;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.1);
+      border-top: 6px solid #116ba7;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .box-title {
+      font-weight: bold;
+      font-size: 18px;
+      border-bottom: 2px solid #62b2e8;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      color: #f3fbf3;
+    }
+
+    .stats-table {
+      width: 100%;
+      font-size: 16px;
+    }
+
+    .stats-table tr {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #4ea0c3;
+      color: #ffffff;
+    }
+
+    .log-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #f3fbf3;
+    }
+
+    .delete-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 25px;
+    }
+
+    .delete-btn:hover {
+      background-color: #c9302c;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="statsPage" class="slide-page">
+
+    <div class="header">
+      <i class="fas fa-arrow-right back-icon" onclick="goBack()"></i>
+      <h3>الإحصائيات والسجل</h3>
+    </div>
+
+    <div class="box">
+      <div class="box-title">إحصائيات الاستهلاك</div>
+      <table class="stats-table">
+        <tr><td>الاستهلاك اليومي</td><td>125 لتر</td></tr>
+        <tr><td>الاستهلاك الشهري</td><td>3345 لتر</td></tr>
+        <tr><td>عدد مرات التسرب</td><td>0 مرة</td></tr>
+      </table>
+    </div>
+
+    <div class="log-title">سجل التسربات</div>
+    <div class="box">
+      <p>لا توجد تسربات حالياً.</p>
+    </div>
+
+    <button class="delete-btn">🗑️ حذف السجل</button>
+
+  </div>
+
+  <script>
+    window.onload = function () {
+      document.getElementById("statsPage").classList.add("show");
+    };
+
+    function goBack() {
+      const page = document.getElementById("statsPage");
+      page.classList.remove("show");
+      setTimeout(() => {
+        window.history.back();
+      }, 600);
+    }
+  </script>
+
+</body>
+</html>

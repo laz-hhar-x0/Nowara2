@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نظام إدارة تدفق المياه</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="./water.js"></script>
+</head>
+<body>
+
+  <!-- عنصر النصيحة -->
+  <div id="tipContainer" class="tip-container" style="display: none;">
+      <div id="tipContent" class="tip-content"></div>
+  </div>
+
+  <div class="fok">
+    <h3>Sokia</h3>
+    <div>
+        <i class="fas fa-lightbulb settings-icon mx-2" onclick="openTipsPage()" style="margin-right: 10px;"></i>
+        <i class="fas fa-cog settings-icon" onclick="openStatsPage()"></i>
+    </div>
+  </div>
+
+  <div class="box">
+      <div class="box-title">إدارة تدفق المياه</div>
+      <div class="water-level">0.0<span>L</span></div>
+      <div class="row">
+          <div class="input-icon">
+              <i class="fas fa-tint"></i>
+              <input type="number" id="waterInput" placeholder="كمية المياه (لتر)">
+          </div>
+      </div>
+  </div>
+
+  <div class="box">
+      <div class="box-title">تحكم في النظام</div><br>
+      <div class="row-control">
+          <button id="powerBtn" class="img-btn">
+              <img src="power-green.png" alt="Power" id="powerImg" width="40"><br>
+              <div id="powerText">تشغيل</div>
+          </button>
+
+          <div class="auto-icon" id="autoIcon" style="cursor: pointer;">
+              <img src="autoBlue.png" alt="Auto" id="autoImg" width="40"><br>
+              <div id="autoText" style="color: blue;">تلقائي</div>
+          </div>
+
+          <!-- زر التحديث -->
+          <button id="refreshBtn" class="img-btn">
+              <img src="refrech.png" alt="Refresh" id="refreshImg" width="40"><br>
+              <div>تحديث</div>
+          </button>
+      </div>
+  </div>
+
+  <div class="box-titlee">اماكن السقي</div><br>
+  <div class="zones">
+      <div class="zone">✅ <br> المنطقة 1</div>
+      <div class="zone">✅ <br> المنطقة 2</div>
+      <div class="zone">✅ <br> المنطقة 3</div>
+      <div class="zone">✅ <br> المنطقة 4</div>
+  </div>
+
+
+</body>
+</html>
