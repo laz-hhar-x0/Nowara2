@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         el.style.borderBottom = "4px solid red";
                         el.style.color = "red";
                     } else {
+                        el.style.color= "rgb(34, 212, 34)";
                         el.style.borderTop = "4px solid rgb(34, 212, 34)";
                         el.style.borderBottom = "4px solid rgb(34, 212, 34)";
                     }
