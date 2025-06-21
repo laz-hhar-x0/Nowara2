@@ -7,7 +7,25 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDIW0KnO1U98iOiMcVJ3lW2yAvzuNQJvVw",
+    authDomain: "sokiaa-7129a.firebaseapp.com",
+    databaseURL: "https://sokiaa-7129a-default-rtdb.firebaseio.com",
+    projectId: "sokiaa-7129a",
+    storageBucket: "sokiaa-7129a.appspot.com",
+    messagingSenderId: "237882065921",
+    appId: "1:237882065921:web:f27fae5fa3ed6969832c00",
+    measurementId: "G-WGTM3Z2KWV"
+  };
 
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
+  <script src="./water.js"></script>
   <style>
     * {
       margin: 0;
@@ -125,7 +143,7 @@
     <div class="box">
       <div class="box-title">إحصائيات الاستهلاك</div>
       <table class="stats-table">
-        <tr><td>الاستهلاك اليومي</td><td>125 لتر</td></tr>
+         <tr><td>الاستهلاك اليومي</td><td id="dailyUsage">0 لتر</td></tr>
         <tr><td>الاستهلاك الشهري</td><td>3345 لتر</td></tr>
         <tr><td>عدد مرات التسرب</td><td>0 مرة</td></tr>
       </table>
@@ -152,7 +170,61 @@
         window.history.back();
       }, 600);
     }
-  </script>
+
+
+  db.ref("/stats/daily/2025-06-21/totalWater").on("value", (snapshot) => {
+    const val = snapshot.val();
+      console.log("daily totalWater from Firebase:", val); // هذا باش تتأكد راه يوصلك حاجة
+    if (val !== null && document.getElementById("dailyUsage")) {
+      document.getElementById("dailyUsage").innerText = `${val} لتر`;
+    }
+  });
+
+
+  window.onload = function () {
+    document.getElementById("statsPage").classList.add("show");
+  };
+
+  function goBack() {
+    const page = document.getElementById("statsPage");
+    page.classList.remove("show");
+    setTimeout(() => {
+      window.history.back();
+    }, 600);
+  }
+
+  // التاريخ الحالي بصيغة YYYY-MM-DD
+  const today = new Date().toISOString().split('T')[0];
+  const thisMonth = today.slice(0, 7);
+
+  // تحديث الاستهلاك اليومي
+  db.ref(`/stats/daily/${today}/totalWater`).on("value", (snapshot) => {
+    const val = snapshot.val();
+    console.log("daily totalWater from Firebase:", val);
+    if (val !== null) {
+      document.getElementById("dailyUsage").innerText = `${val} لتر`;
+    }
+  });
+
+  // تحديث الاستهلاك الشهري
+  db.ref(`/stats/monthly/${thisMonth}/totalWater`).on("value", (snapshot) => {
+    const val = snapshot.val();
+    console.log("monthly totalWater from Firebase:", val);
+    if (val !== null) {
+      document.querySelector(".stats-table tr:nth-child(2) td:last-child").innerText = `${val} لتر`;
+    }
+  });
+
+  // تحديث عدد التسربات اليومية
+  db.ref(`/stats/daily/${today}/leaks`).on("value", (snapshot) => {
+    const val = snapshot.val();
+    console.log("daily leaks from Firebase:", val);
+    if (val !== null) {
+      document.querySelector(".stats-table tr:nth-child(3) td:last-child").innerText = `${val} مرة`;
+    }
+  });
+</script>
+
 
 </body>
 </html>
