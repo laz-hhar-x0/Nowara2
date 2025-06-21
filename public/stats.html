@@ -144,8 +144,8 @@
       <div class="box-title">إحصائيات الاستهلاك</div>
       <table class="stats-table">
          <tr><td>الاستهلاك اليومي</td><td id="dailyUsage">0 لتر</td></tr>
-        <tr><td>الاستهلاك الشهري</td><td>3345 لتر</td></tr>
-        <tr><td>عدد مرات التسرب</td><td>0 مرة</td></tr>
+         <tr><td>الاستهلاك الشهري</td><td id="monthlyUsage">0 لتر</td></tr>
+          <tr><td>عدد مرات التسرب</td><td id="leakCount">0 مرة</td></tr>
       </table>
     </div>
 
@@ -158,73 +158,59 @@
 
   </div>
 
-  <script>
-    window.onload = function () {
-      document.getElementById("statsPage").classList.add("show");
-    };
+    
+     <script>
+      window.onload = function () {
+        document.getElementById("statsPage").classList.add("show");
+        
+        // التاريخ المطلوب
+        const targetDate = "2025-06-20";
+        const targetMonth = "2025-06"; // نفس الشهر المطلوب
+        
+        // تحديث عنوان الصفحة
+        document.querySelector("h3").innerText = `إحصائيات ${targetDate}`;
+        
+        // جلب بيانات الاستهلاك اليومي
+        db.ref(`/stats/daily/${targetDate}/totalWater`).on("value", (snapshot) => {
+          const val = snapshot.val();
+          console.log(`totalWater for ${targetDate}:`, val);
+          if (val !== null) {
+            document.getElementById("dailyUsage").innerText = `${val} لتر`;
+          } else {
+            document.getElementById("dailyUsage").innerText = "لا توجد بيانات";
+          }
+        });
+        
+        // جلب بيانات عدد التسربات
+        db.ref(`/stats/daily/${targetDate}/leaks`).on("value", (snapshot) => {
+          const val = snapshot.val();
+          console.log(`leaks for ${targetDate}:`, val);
+          if (val !== null) {
+            document.getElementById("leakCount").innerText = `${val} مرة`;
+          } else {
+            document.getElementById("leakCount").innerText = "لا توجد بيانات";
+          }
+        });
+        
+        // جلب بيانات الاستهلاك الشهري
+        db.ref(`/stats/monthly/${targetMonth}/totalWater`).on("value", (snapshot) => {
+          const val = snapshot.val();
+          console.log(`monthly totalWater for ${targetMonth}:`, val);
+          if (val !== null) {
+            document.getElementById("monthlyUsage").innerText = `${val} لتر`;
+          } else {
+            document.getElementById("monthlyUsage").innerText = "لا توجد بيانات";
+          }
+        });
+      };
 
-    function goBack() {
-      const page = document.getElementById("statsPage");
-      page.classList.remove("show");
-      setTimeout(() => {
-        window.history.back();
-      }, 600);
-    }
-
-
-  db.ref("/stats/daily/2025-06-20/totalWater").on("value", (snapshot) => {
-    const val = snapshot.val();
-      console.log("daily totalWater from Firebase:", val); // هذا باش تتأكد راه يوصلك حاجة
-    if (val !== null && document.getElementById("dailyUsage")) {
-      document.getElementById("dailyUsage").innerText = `${val} لتر`;
-    }
-  });
-
-
-  window.onload = function () {
-    document.getElementById("statsPage").classList.add("show");
-  };
-
-  function goBack() {
-    const page = document.getElementById("statsPage");
-    page.classList.remove("show");
-    setTimeout(() => {
-      window.history.back();
-    }, 600);
-  }
-
-  // التاريخ الحالي بصيغة YYYY-MM-DD
-  const today = new Date().toISOString().split('T')[0];
-  const thisMonth = today.slice(0, 7);
-
-  // تحديث الاستهلاك اليومي
-  db.ref(`/stats/daily/${today}/totalWater`).on("value", (snapshot) => {
-    const val = snapshot.val();
-    console.log("daily totalWater from Firebase:", val);
-    if (val !== null) {
-      document.getElementById("dailyUsage").innerText = `${val} لتر`;
-    }
-  });
-
-  // تحديث الاستهلاك الشهري
-  db.ref(`/stats/monthly/${thisMonth}/totalWater`).on("value", (snapshot) => {
-    const val = snapshot.val();
-    console.log("monthly totalWater from Firebase:", val);
-    if (val !== null) {
-      document.querySelector(".stats-table tr:nth-child(2) td:last-child").innerText = `${val} لتر`;
-    }
-  });
-
-  // تحديث عدد التسربات اليومية
-  db.ref(`/stats/daily/${today}/leaks`).on("value", (snapshot) => {
-    const val = snapshot.val();
-    console.log("daily leaks from Firebase:", val);
-    if (val !== null) {
-      document.querySelector(".stats-table tr:nth-child(3) td:last-child").innerText = `${val} مرة`;
-    }
-  });
-</script>
-
-
+      function goBack() {
+        const page = document.getElementById("statsPage");
+        page.classList.remove("show");
+        setTimeout(() => {
+          window.history.back();
+        }, 600);
+      }
+    </script>
 </body>
 </html>
