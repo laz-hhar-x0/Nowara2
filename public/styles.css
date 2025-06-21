@@ -99,8 +99,9 @@
         }
         .zone {
             background-color: #116ba7; 
-            color: #ddd;
+            color: #43fa00;
             border-top: 4px solid rgb(34, 212, 34);
+            border-bottom: 4px solid rgb(34, 212, 34);
             padding: 30px 0px;
             display: flex;
             flex-direction: column; 
@@ -111,9 +112,9 @@
         }
        .zone.leak {
             background-color: #116ba7; 
-            border-top: 4px solid #ff0000;
-            border-bottom: 4px solid #ff0000;
-            color: #ff0000;
+            border-top: 4px solid rgb(255, 0, 0);
+            border-bottom: 4px solid rgb(255, 0, 0);
+            color: rgb(255, 0, 0);
             font-size: 22px;
         }
 

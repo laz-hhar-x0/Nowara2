@@ -92,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const autoImg = document.getElementById("autoImg");
     const autoText = document.getElementById("autoText");
     const waterLevel = document.querySelector(".water-level");
-    const refreshBtn = document.getElementById("refreshBtn");
 
     let isAuto = false;
     let isWaterOn = false;
@@ -129,10 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
             db.ref("system").update({ isWaterOn: false });
         } else {
             const waterValue = parseFloat(waterInput.value);
-            if (isNaN(waterValue) || waterValue < 100) {
-                alert("يجب إدخال 100 لتر على الأقل");
-                return;
-            }
+              if (isNaN(waterValue)) {
+                    alert("رجاءً أدخل قيمة صالحة للماء");
+                    return;
+                }
+
             isWaterOn = true;
             updateUI();
             db.ref("system").update({
@@ -142,19 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    refreshBtn.addEventListener("click", () => {
-        isWaterOn = false;
-        isAuto = false;
-        updateUI();
-        waterInput.value = "";
-        waterLevel.innerHTML = `0.0<span style="margin-left: 3px;">L</span>`;
-        localStorage.removeItem("waterInputValue");
-        db.ref("system").update({
-            isWaterOn: false,
-            mode: "Manual",
-            totalInput: 0
-        });
-    });
 
     db.ref("system").on("value", (snapshot) => {
         const systemData = snapshot.val();
@@ -194,12 +181,21 @@ document.addEventListener('DOMContentLoaded', () => {
     db.ref("system/zones").on("value", (snapshot) => {
         const zonesData = snapshot.val();
         if (zonesData) {
-            zonesElements.forEach((el, index) => {
+          zonesElements.forEach((el, index) => {
                 const zoneKey = (index + 1).toString();
                 const zone = zonesData[zoneKey];
                 if (zone) {
                     el.innerHTML = `${zone.hasLeak ? '❌' : '✅'} <br> ${zone.name}`;
-                    el.style.color = zone.hasLeak ? 'red' : 'green';
+
+                    if (zone.hasLeak) {
+                        el.style.borderTop = "4px solid red";
+                        el.style.borderBottom = "4px solid red";
+                        el.style.color = "red";
+                    } else {
+                        el.style.borderTop = "4px solid rgb(34, 212, 34)";
+                        el.style.borderBottom = "none"; // أو نفس اللون لو تحب تظهره دايم
+                        el.style.color = "#ddd";
+                    }
                 }
             });
         }
