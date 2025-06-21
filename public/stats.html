@@ -172,7 +172,7 @@
     }
 
 
-  db.ref("/stats/daily/2025-06-21/totalWater").on("value", (snapshot) => {
+  db.ref("/stats/daily/2025-06-20/totalWater").on("value", (snapshot) => {
     const val = snapshot.val();
       console.log("daily totalWater from Firebase:", val); // هذا باش تتأكد راه يوصلك حاجة
     if (val !== null && document.getElementById("dailyUsage")) {
