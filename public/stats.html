@@ -149,10 +149,7 @@
       </table>
     </div>
 
-    <div class="log-title">سجل التسربات</div>
-    <div class="box">
-      <p>لا توجد تسربات حالياً.</p>
-    </div>
+  
 
     <button class="delete-btn">🗑️ حذف السجل</button>
 
@@ -211,6 +208,29 @@
           window.history.back();
         }, 600);
       }
+
+      document.querySelector(".delete-btn").addEventListener("click", () => {
+  const targetDate = "2025-06-20";
+  const targetMonth = "2025-06";
+
+  // تحديث Firebase بالقيم صفر
+  db.ref(`/stats/daily/${targetDate}`).update({
+    totalWater: 0,
+    leaks: 0
+  });
+
+  db.ref(`/stats/monthly/${targetMonth}`).update({
+    totalWater: 0,
+    leaks: 0
+  });
+
+  // تحديث الواجهة
+  document.getElementById("dailyUsage").innerText = "0 لتر";
+  document.getElementById("monthlyUsage").innerText = "0 لتر";
+  document.getElementById("leakCount").innerText = "0 مرة";
+});
+
+
     </script>
 </body>
 </html>
