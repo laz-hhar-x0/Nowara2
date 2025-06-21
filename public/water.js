@@ -193,8 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         el.style.color = "red";
                     } else {
                         el.style.borderTop = "4px solid rgb(34, 212, 34)";
-                        el.style.borderBottom = "none"; // أو نفس اللون لو تحب تظهره دايم
-                        el.style.color = "#ddd";
+                        el.style.borderBottom = "4px solid rgb(34, 212, 34)";
                     }
                 }
             });
