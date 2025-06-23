@@ -9,23 +9,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet" />
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDIW0KnO1U98iOiMcVJ3lW2yAvzuNQJvVw",
-    authDomain: "sokiaa-7129a.firebaseapp.com",
-    databaseURL: "https://sokiaa-7129a-default-rtdb.firebaseio.com",
-    projectId: "sokiaa-7129a",
-    storageBucket: "sokiaa-7129a.appspot.com",
-    messagingSenderId: "237882065921",
-    appId: "1:237882065921:web:f27fae5fa3ed6969832c00",
-    measurementId: "G-WGTM3Z2KWV"
-  };
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDIW0KnO1U98iOiMcVJ3lW2yAvzuNQJvVw",
+      authDomain: "sokiaa-7129a.firebaseapp.com",
+      databaseURL: "https://sokiaa-7129a-default-rtdb.firebaseio.com",
+      projectId: "sokiaa-7129a",
+      storageBucket: "sokiaa-7129a.appspot.com",
+      messagingSenderId: "237882065921",
+      appId: "1:237882065921:web:f27fae5fa3ed6969832c00",
+      measurementId: "G-WGTM3Z2KWV"
+    };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-</script>
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+  </script>
 
-  <script src="./water.js"></script>
   <style>
     * {
       margin: 0;
@@ -107,13 +106,6 @@
       color: #ffffff;
     }
 
-    .log-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #f3fbf3;
-    }
-
     .delete-btn {
       width: 100%;
       padding: 12px;
@@ -134,103 +126,79 @@
 <body>
 
   <div id="statsPage" class="slide-page">
-
     <div class="header">
       <i class="fas fa-arrow-right back-icon" onclick="goBack()"></i>
-      <h3>الإحصائيات والسجل</h3>
+      <h3>الإحصائيات</h3>
     </div>
 
     <div class="box">
       <div class="box-title">إحصائيات الاستهلاك</div>
       <table class="stats-table">
-         <tr><td>الاستهلاك اليومي</td><td id="dailyUsage">0 لتر</td></tr>
-         <tr><td>الاستهلاك الشهري</td><td id="monthlyUsage">0 لتر</td></tr>
-          <tr><td>عدد مرات التسرب</td><td id="leakCount">0 مرة</td></tr>
+        <tr><td>الاستهلاك اليومي</td><td id="dailyUsage">0 لتر</td></tr>
+        <tr><td>الاستهلاك الشهري</td><td id="monthlyUsage">0 لتر</td></tr>
+        <tr><td>عدد مرات التسرب</td><td id="leakCount">0 مرة</td></tr>
       </table>
     </div>
 
-  
-
     <button class="delete-btn">🗑️ حذف السجل</button>
-
   </div>
 
-    
-     <script>
-      window.onload = function () {
-        document.getElementById("statsPage").classList.add("show");
-        
-        // التاريخ المطلوب
-        const targetDate = "2025-06-20";
-        const targetMonth = "2025-06"; // نفس الشهر المطلوب
-        
-        // تحديث عنوان الصفحة
-        document.querySelector("h3").innerText = `إحصائيات ${targetDate}`;
-        
-        // جلب بيانات الاستهلاك اليومي
-        db.ref(`/stats/daily/${targetDate}/totalWater`).on("value", (snapshot) => {
-          const val = snapshot.val();
-          console.log(`totalWater for ${targetDate}:`, val);
-          if (val !== null) {
-            document.getElementById("dailyUsage").innerText = `${val} لتر`;
-          } else {
-            document.getElementById("dailyUsage").innerText = "لا توجد بيانات";
-          }
+  <script>
+    window.onload = function () {
+      document.getElementById("statsPage").classList.add("show");
+
+      db.ref('/stats/daily').once("value", (snapshot) => {
+        const dailyData = snapshot.val();
+        if (!dailyData) return;
+
+        // ترتيب المفاتيح وأخذ آخر تاريخ
+        const allDates = Object.keys(dailyData).sort();
+        const lastDate = allDates[allDates.length - 1];
+        const lastMonth = lastDate.slice(0, 7);
+
+        document.querySelector("h3").innerText = `إحصائيات ${lastDate}`;
+
+        db.ref(`/stats/daily/${lastDate}/totalWater`).on("value", (snap) => {
+          const val = snap.val();
+          document.getElementById("dailyUsage").innerText = val !== null ? `${val} لتر` : "لا توجد بيانات";
         });
-        
-        // جلب بيانات عدد التسربات
-        db.ref(`/stats/daily/${targetDate}/leaks`).on("value", (snapshot) => {
-          const val = snapshot.val();
-          console.log(`leaks for ${targetDate}:`, val);
-          if (val !== null) {
-            document.getElementById("leakCount").innerText = `${val} مرة`;
-          } else {
-            document.getElementById("leakCount").innerText = "لا توجد بيانات";
-          }
+
+        db.ref(`/stats/daily/${lastDate}/leaks`).on("value", (snap) => {
+          const val = snap.val();
+          document.getElementById("leakCount").innerText = val !== null ? `${val} مرة` : "لا توجد بيانات";
         });
-        
-        // جلب بيانات الاستهلاك الشهري
-        db.ref(`/stats/monthly/${targetMonth}/totalWater`).on("value", (snapshot) => {
-          const val = snapshot.val();
-          console.log(`monthly totalWater for ${targetMonth}:`, val);
-          if (val !== null) {
-            document.getElementById("monthlyUsage").innerText = `${val} لتر`;
-          } else {
-            document.getElementById("monthlyUsage").innerText = "لا توجد بيانات";
-          }
+
+        db.ref(`/stats/monthly/${lastMonth}/totalWater`).on("value", (snap) => {
+          const val = snap.val();
+          document.getElementById("monthlyUsage").innerText = val !== null ? `${val} لتر` : "لا توجد بيانات";
         });
-      };
 
-      function goBack() {
-        const page = document.getElementById("statsPage");
-        page.classList.remove("show");
-        setTimeout(() => {
-          window.history.back();
-        }, 600);
-      }
+        // حذف السجل
+        document.querySelector(".delete-btn").addEventListener("click", () => {
+          db.ref(`/stats/daily/${lastDate}`).update({
+            totalWater: 0,
+            leaks: 0
+          });
 
-      document.querySelector(".delete-btn").addEventListener("click", () => {
-  const targetDate = "2025-06-20";
-  const targetMonth = "2025-06";
+          db.ref(`/stats/monthly/${lastMonth}`).update({
+            totalWater: 0,
+            leaks: 0
+          });
 
-  // تحديث Firebase بالقيم صفر
-  db.ref(`/stats/daily/${targetDate}`).update({
-    totalWater: 0,
-    leaks: 0
-  });
+          document.getElementById("dailyUsage").innerText = "0 لتر";
+          document.getElementById("monthlyUsage").innerText = "0 لتر";
+          document.getElementById("leakCount").innerText = "0 مرة";
+        });
+      });
+    };
 
-  db.ref(`/stats/monthly/${targetMonth}`).update({
-    totalWater: 0,
-    leaks: 0
-  });
-
-  // تحديث الواجهة
-  document.getElementById("dailyUsage").innerText = "0 لتر";
-  document.getElementById("monthlyUsage").innerText = "0 لتر";
-  document.getElementById("leakCount").innerText = "0 مرة";
-});
-
-
-    </script>
+    function goBack() {
+      const page = document.getElementById("statsPage");
+      page.classList.remove("show");
+      setTimeout(() => {
+        window.history.back();
+      }, 600);
+    }
+  </script>
 </body>
 </html>

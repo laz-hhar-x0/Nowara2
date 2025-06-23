@@ -201,6 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+
+    
     showTip();
     tipInterval = setInterval(showTip, 10000);
 });
