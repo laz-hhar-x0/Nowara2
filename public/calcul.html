@@ -90,6 +90,22 @@
     background-color: #e43a3a00;
     color: #ffffff;
 }
+.toggle-cat {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+  transition: background 0.3s;
+}
+.toggle-cat:hover {
+  background-color: #11a0ff;
+}
+.hidden {
+  display: none;
+}
 
   </style>
 </head>
@@ -109,14 +125,15 @@
       <label for="width">العرض (متر)</label>
       <input type="number" id="width" placeholder="  العرض بالمتر   m">
 
-      <label>الفئة</label>
-      <div class="categories">
-        <div class="cat-item" data-value="2">الأشجار المثمرة</div>
-        <div class="cat-item" data-value="6">الفواكه الموسمية</div>
-        <div class="cat-item" data-value="5">الخضروات</div>
-        <div class="cat-item" data-value="5">الحبوب</div>
-        <div class="cat-item" data-value="7">الأعشاب والمراعي</div>
-      </div>
+<div class="toggle-cat" onclick="toggleCategories()">الفئة <i class="fas fa-caret-down"></i></div>
+<div class="categories hidden">
+  <div class="cat-item" data-value="2">الأشجار المثمرة</div>
+  <div class="cat-item" data-value="6">الفواكه الموسمية</div>
+  <div class="cat-item" data-value="5">الخضروات</div>
+  <div class="cat-item" data-value="5">الحبوب</div>
+  <div class="cat-item" data-value="7">الأعشاب والمراعي</div>
+</div>
+
 
       <div id="result" class="result-box">يرجى إدخال القيم</div>
     </div>
@@ -155,6 +172,11 @@
       const total = length * width * selectedCatValue;
       resultDiv.innerHTML = `  النتيجة  =  <strong>${total}</strong> لتر  `;
     }
+    function toggleCategories() {
+  const catBox = document.querySelector(".categories");
+  catBox.classList.toggle("hidden");
+}
+
   </script>
 </body>
 </html>
