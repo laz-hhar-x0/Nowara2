@@ -178,29 +178,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 👇 هذا هو الكود الإضافي الخاص بالمناطق (zones)
     const zonesElements = document.querySelectorAll('.zone');
-    db.ref("system/zones").on("value", (snapshot) => {
-        const zonesData = snapshot.val();
-        if (zonesData) {
-          zonesElements.forEach((el, index) => {
-                const zoneKey = (index + 1).toString();
-                const zone = zonesData[zoneKey];
-                if (zone) {
-                    el.innerHTML = `${zone.hasLeak ? '❌' : '✅'} <br> ${zone.name}`;
+    // db.ref("system/zones").on("value", (snapshot) => {
+    //     const zonesData = snapshot.val();
+    //     if (zonesData) {
+    //       zonesElements.forEach((el, index) => {
+    //             const zoneKey = (index + 1).toString();
+    //             const zone = zonesData[zoneKey];
+    //             if (zone) {
+    //                 el.innerHTML = `${zone.hasLeak ? '❌' : '✅'} <br> ${zone.name}`;
 
-                    if (zone.hasLeak) {
-                        el.style.borderTop = "4px solid red";
-                        el.style.borderBottom = "4px solid red";
-                        el.style.color = "red";
-                    } else {
-                        el.style.color= "rgb(34, 212, 34)";
-                        el.style.borderTop = "4px solid rgb(34, 212, 34)";
-                        el.style.borderBottom = "4px solid rgb(34, 212, 34)";
-                    }
+    //                 if (zone.hasLeak) {
+    //                     el.style.borderTop = "4px solid red";
+    //                     el.style.borderBottom = "4px solid red";
+    //                     el.style.color = "red";
+    //                 } else {
+    //                     el.style.color= "rgb(34, 212, 34)";
+    //                     el.style.borderTop = "4px solid rgb(34, 212, 34)";
+    //                     el.style.borderBottom = "4px solid rgb(34, 212, 34)";
+    //                 }
+    //             }
+    //         });
+    //     }
+    // });
+
+db.ref("system/zones").on("value", (snapshot) => {
+    const zonesData = snapshot.val();
+    if (zonesData) {
+      zonesElements.forEach((el, index) => {
+            const zoneKey = (index + 1).toString();
+            const zone = zonesData[zoneKey];
+            if (zone) {
+                el.innerHTML = `
+                  ${zone.hasLeak ? '❌' : '✅'} <br>
+                  ${zone.name} <br>
+                  <span style="font-size: 11px; color: #FFF;">الماء المستهلك: ${zone.waterConsumed} لتر</span>
+                `;
+
+                if (zone.hasLeak) {
+                    el.style.borderTop = "4px solid red";
+                    el.style.borderBottom = "4px solid red";
+                    el.style.color = "red";
+                } else {
+                    el.style.color= "rgb(34, 212, 34)";
+                    el.style.borderTop = "4px solid rgb(34, 212, 34)";
+                    el.style.borderBottom = "4px solid rgb(34, 212, 34)";
                 }
-            });
-        }
-    });
-
+            }
+        });
+    }
+});
 
 
     
